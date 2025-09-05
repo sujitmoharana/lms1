@@ -29,7 +29,7 @@ const signInWithGithub = ()=>{
     <Card>
         <CardHeader>
           <CardTitle className='text-xl'>Welcome back!</CardTitle>  
-          <CardDescription>Login with your Github Email Account</CardDescription>
+          <CardDescription>Login with your Github or Email Account</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-4'>
             <Button disabled={githubpending} onClick={signInWithGithub} className='w-full' variant ='outline'>
