@@ -4,12 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { authClient } from '@/lib/auth-client'
-import { GithubIcon, Loader } from 'lucide-react'
-import React, { useTransition } from 'react'
+import { GithubIcon, Loader, Loader2, Send } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import React, { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 const LoginFrom = () => {
 const [githubpending,startGithubTransition] = useTransition()
+const [emailpending,startEmailTransition] = useTransition()
+const [email,setEmail] = useState('');
+const router = useRouter();
 const signInWithGithub = ()=>{
     startGithubTransition(async()=>{        // https://chatgpt.com/s/t_68baa79c0e308191aa7ece475ee67503 
       await authClient.signIn.social({
@@ -23,6 +27,25 @@ const signInWithGithub = ()=>{
             toast.error("internal server error")
           }
         }})
+     })
+  }
+
+   function signInwithEmail()  //5
+  {
+     startEmailTransition(async()=>{
+       await authClient.emailOtp.sendVerificationOtp({
+            email: email, // required
+            type: "sign-in", // required
+            fetchOptions:{
+                onSuccess:()=>{
+                  toast.success('email sent')
+                  router.push(`/verify-request?email=${email}`)
+                },
+                onError:(error)=>{
+                  toast.error("error sending email")
+                }
+              }
+        });
      })
   }
   return (
@@ -52,9 +75,21 @@ const signInWithGithub = ()=>{
             <div className='grid gap-3'>
                  <div className='grid gap-2'>
                   <Label htmlFor='email'>Email</Label>
-                  <Input type='email' placeholder='m@example.com'/>
+                  <Input onChange={(e)=>setEmail(e.target.value)} value={email} type='email' placeholder='m@example.com'/>
                  </div>
-                 <Button>Continue with email</Button>
+                 <Button onClick={signInwithEmail} disabled={emailpending}>
+                    {emailpending?(
+                        <>
+                        <Loader2 className='size-4 animate-spin'/>
+                        <span>loading...</span>
+                        </>
+                    ):(
+                        <>
+                        <Send className='size-4'/>
+                        <p>Continue with email</p>
+                        </>
+                    )}
+                    </Button>
             </div>
         </CardContent>
     </Card>
