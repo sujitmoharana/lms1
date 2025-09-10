@@ -41,18 +41,6 @@ const features: Array<featureProps> = [
   ];
   const  Page = () => {
 const {data:session}= authClient.useSession()
-const router  = useRouter()
-async function signout(){
-  await authClient.signOut({
-    fetchOptions:{
-      onSuccess:()=>{
-        router.push("/")
-        toast.success("signed out successfully")
-      }
-    }
-  })
-}
-
   return (
   <>
   <section className='relative py-20'>

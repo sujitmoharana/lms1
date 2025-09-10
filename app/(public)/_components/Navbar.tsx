@@ -6,6 +6,7 @@ import Logo from "@/public/online-course.png"
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { authClient } from '@/lib/auth-client'
 import { buttonVariants } from '@/components/ui/button'
+import UserDropdown from './UserDropdown'
 const navigationItems = [
     {name:"home",href:"/"},
     {name:"courses",href:"/courses"},
@@ -36,7 +37,7 @@ const Navbar = () => {
                 <ThemeToggle/>
                 {
                     isPending?null:session?(
-                      <p>logged in</p>
+                      <UserDropdown email={session.user.email} name={session.user.name} image={session.user.image || ""}/>
                     ):(
                         <>
                         <Link href="/login" className={buttonVariants({variant:"secondary"})}>
