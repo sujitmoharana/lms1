@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import slugify from "slugify"
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Richtexteditor from '@/components/rich-text-editor/Editor'
 const CourseCreate = () => {
      // 1. Define your form. here we use react hook form  /* 4 */
      const form = useForm<CourseSchema>({
@@ -98,9 +99,11 @@ const CourseCreate = () => {
                <FormField  control={form.control} name='description' render={({field})=>(
                <FormItem className='w-full'>
                   <FormLabel>description</FormLabel>
-                     <FormControl>
+
+                  <Richtexteditor field={field} /> {/* 1 */}
+                     {/* <FormControl>
                         <Textarea placeholder='description' {...field}/>
-                     </FormControl>
+                     </FormControl> */}
                      <FormMessage/>
                </FormItem>
               )}/>
