@@ -13,6 +13,7 @@ import slugify from "slugify"
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Richtexteditor from '@/components/rich-text-editor/Editor'
+import Uploader from '@/components/file-uploader/Uploader'
 const CourseCreate = () => {
      // 1. Define your form. here we use react hook form  /* 4 */
      const form = useForm<CourseSchema>({
@@ -112,7 +113,8 @@ const CourseCreate = () => {
                <FormItem className='w-full'>
                   <FormLabel>Thumbnail image</FormLabel>
                      <FormControl>
-                        <Input placeholder='Thumbnail url' {...field}/>
+                        {/* <Input placeholder='Thumbnail url' {...field}/> */}
+                        <Uploader/>{/* 1 */}
                      </FormControl>
                      <FormMessage/>
                </FormItem>
