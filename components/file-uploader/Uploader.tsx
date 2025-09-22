@@ -32,7 +32,7 @@ const Uploader = () => {
     })
    async function uploadFile (file:File)
     {
-        console.log(file);
+       // console.log(file);
         
         setFileState((prev)=>({...prev,uploading:true,progress:0,error:false}))
         
@@ -48,7 +48,7 @@ const Uploader = () => {
                     isImage:true
                 })
             })
-            console.log(presignedResponse);
+            //console.log(presignedResponse);
             
             if (!presignedResponse.ok) {
                 toast.error('fails to get presigned url')
@@ -57,16 +57,16 @@ const Uploader = () => {
             }
          
             const {presignedurl,key} = await presignedResponse.json();
-           console.log(presignedurl);
+           //console.log(presignedurl);
         //    console.log(key);
             await new Promise<void>((resolve,reject)=>{
                 const xhr = new XMLHttpRequest();
-                console.log("xhr",xhr);
+                //console.log("xhr",xhr);
                 xhr.upload.onprogress = (event)=>{
                     if (event.lengthComputable) {
                         const percentageCompleted = (event.loaded /event.total)*100
                         toast(`hello1 ${xhr.status}`)
-                        console.log(percentageCompleted)
+                        //console.log(percentageCompleted)
                         setFileState((prev)=>({...prev,uploading:true,progress:Math.round(percentageCompleted)}))
 
                     }
@@ -101,11 +101,15 @@ const Uploader = () => {
     }
 
     const onDrop = useCallback((acceptedFiles:File[]) => {
-        console.log(acceptedFiles);
+       // console.log(acceptedFiles);
+
+        if (filestate.objectUrl && !filestate.objectUrl.startsWith("http")) {
+            URL.revokeObjectURL(filestate.objectUrl)
+        }
         
        if (acceptedFiles.length>0) {
         const file = acceptedFiles[0]
-      console.log(file);
+      //console.log(file);
       
         setFileState({
            file:file,
@@ -120,8 +124,51 @@ const Uploader = () => {
 
         uploadFile(file)
        }
-      }, [])
+      }, [filestate.objectUrl])
 
+      async function handleRemoveFile()
+      {
+        if (filestate.isDeleting || !filestate.objectUrl) {
+            return
+        }
+
+        if (!filestate.key) {
+            toast.error("No file key found — cannot delete");
+            return;
+          }
+
+         // console.log(filestate.key);
+          
+
+        try {
+
+            setFileState((prev)=>({...prev,isDeleting:true}))
+            
+            const response = await fetch('/api/s3/delete',{method:'DELETE',headers:{"Content-Type":"application/json"},body:JSON.stringify({key:filestate.key})});
+
+          //  console.log(response);
+            if (!response.ok) {
+                toast.error("failed to remove file from storage ")
+                setFileState((prev)=>({...prev,isDeleting:true,error:true}))
+                return;
+            }
+        
+            console.log(filestate.objectUrl);
+
+            if (filestate.objectUrl && !filestate.objectUrl.startsWith("http")) {
+                console.log(filestate.objectUrl);
+                URL.revokeObjectURL(filestate.objectUrl)
+            }
+
+            setFileState((prev)=>({file:null,uploading:false,progress:0,objectUrl:undefined,fileType:"image",error:false,id:null,isDeleting:false}))
+
+            toast.success("file removed successfully")
+        } catch (error) {
+            toast.error("error removing file ,please try again");
+            setFileState((prev)=>({...prev,isDeleting:false,error:true}))
+
+        }
+      }
 
       function rejectedFiles(filerejection:FileRejection[])
       {
@@ -150,11 +197,18 @@ const Uploader = () => {
 
         if (filestate.objectUrl) {
             return (
-                <RenderUplodedState previewUrl={filestate.objectUrl}/>
+                <RenderUplodedState handleRemoveFile={handleRemoveFile} isDeleting={filestate.isDeleting}   previewUrl={filestate.objectUrl}/>
             )
         }
         return <RenderEmptystate isDragActive={isDragActive}/>
       }
+      useEffect(()=>{  /* it is called cleanup function it will run on previous data */
+        return ()=>{
+            if (filestate.objectUrl && !filestate.objectUrl.startsWith("http")) {
+                URL.revokeObjectURL(filestate.objectUrl)
+            }
+        }
+      },[filestate.objectUrl])
 
  const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
@@ -162,9 +216,9 @@ const Uploader = () => {
      maxFiles:1,
      multiple:false,
      maxSize:5*1024*1024, /* i want to store 5mb ..... 1mb is 1024 * 1024 ..... */
-     onDropRejected: rejectedFiles
+     onDropRejected: rejectedFiles,
+     disabled:filestate.uploading || !!filestate.objectUrl
 })
-
 
   return (
     <Card {...getRootProps()} className={cn("relative border-2 border-dashed transition-colors duration-200 ease-in-out w-full h-64",isDragActive?"border-primary bg-primary/10 border-solid":"border-border hover:border-primary")}>
