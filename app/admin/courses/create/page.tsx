@@ -1,10 +1,10 @@
 "use client"
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { courseCategories, courselavel, courseSchema, CourseSchema, coursestatus } from '@/lib/ZodSchema'
-import { ArrowLeft, PlusIcon, SparkleIcon } from 'lucide-react'
+import { courseCategories, courselavel, courseSchema, CourseSchemaType, coursestatus } from '@/lib/ZodSchema'
+import { ArrowLeft, Loader2, PlusIcon, SparkleIcon } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useTransition } from 'react'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -14,9 +14,16 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Richtexteditor from '@/components/rich-text-editor/Editor'
 import Uploader from '@/components/file-uploader/Uploader'
+import { tryCatch } from '@/hooks/try-catch'
+import { CreateCourse } from './action'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 const CourseCreate = () => {
+
+   const [pending,startTransition] = useTransition();
+const router = useRouter()
      // 1. Define your form. here we use react hook form  /* 4 */
-     const form = useForm<CourseSchema>({
+     const form = useForm<CourseSchemaType>({
       resolver: zodResolver(courseSchema) ,
       defaultValues: {
         title: "",
@@ -32,10 +39,29 @@ const CourseCreate = () => {
       }
     });
     
-    function onSubmit(values:CourseSchema) {
+    function onSubmit(values:CourseSchemaType) {
       // Do something with the form values.
       // ✅ This will be type-safe and validated.
-      console.log(values.title)
+      console.log(values)
+    startTransition(async()=>{
+      const {data:result,error} = await tryCatch(CreateCourse(values))
+
+      if (error) {
+         toast.error("an unexpected error occured ,please try again");
+         return;
+      }
+
+      if (result.status === "success") {
+        toast.success(result.message); 
+        form.reset()
+        router.push("/admin/courses")
+      }else if(result.status==="error")
+      {
+         toast.error(result.message)
+      }
+    })
+
+      
     }
   console.log(form.getValues("title"));
   console.log(form.watch("title"));
@@ -60,7 +86,7 @@ const CourseCreate = () => {
             <Form {...form}>
               <form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
               <FormField control={form.control} name='title' render={({field})=>(
-               <FormItem>
+               <FormItem className='w-full'>
                   <FormLabel>Title</FormLabel>
                      <FormControl>
                         <Input placeholder='title' {...field}/>
@@ -100,8 +126,9 @@ const CourseCreate = () => {
                <FormField  control={form.control} name='description' render={({field})=>(
                <FormItem className='w-full'>
                   <FormLabel>description</FormLabel>
-
-                  <Richtexteditor field={field} /> {/* 1 */}
+                  <FormControl>
+                  <Richtexteditor field={field} />
+                  </FormControl>
                      {/* <FormControl>
                         <Textarea placeholder='description' {...field}/>
                      </FormControl> */}
@@ -196,31 +223,7 @@ const CourseCreate = () => {
                </FormItem>
               )}/>
 
-<FormField control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                           <FormItem className="w-full">
-                              <FormLabel>Category</FormLabel>
-                              <FormControl>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                              
-                                 <SelectTrigger className='w-full'>
-                                    <SelectValue placeholder="Select category" />
-                                 </SelectTrigger>
-                                
-                                 <SelectContent>
-                                    {courseCategories.map((category) => (
-                                    <SelectItem key={category} value={category}>
-                                       {category}
-                                    </SelectItem>
-                                    ))}
-                                 </SelectContent>
-                              </Select>
-                              </FormControl>
-                              <FormMessage />
-                           </FormItem>
-                        )}
-                        />
+
              </div>
              <FormField control={form.control}
                         name="status"
@@ -248,8 +251,17 @@ const CourseCreate = () => {
                         )}
                         />
 
-                        <Button>
-                           Create course <PlusIcon className='ml-1' size={16} />
+                        <Button type='submit' disabled={pending}>
+                           {pending ? (
+                              <>
+                              creating....
+                              <Loader2 className='animate-spin'/>
+                              </>
+                           ):(
+                              <>
+                              Create course <PlusIcon className='ml-1' size={16}/>
+                              </>
+                           )}
                         </Button>
               </form>
             </Form>

@@ -27,4 +27,4 @@ export const courseSchema = z.object({
     status:z.enum(coursestatus,{message:"status is required"})
 });
 
-export type CourseSchema = z.infer<typeof courseSchema>  //https://chatgpt.com/s/t_68c3cb2a56848191bac4d47962f5e307
+export type CourseSchemaType = z.infer<typeof courseSchema>  //https://chatgpt.com/s/t_68c3cb2a56848191bac4d47962f5e307
