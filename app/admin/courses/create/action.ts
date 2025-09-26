@@ -1,16 +1,49 @@
 "use server"
+import { requireAdmin } from "@/app/data/admin/require-admin";
+import arject, { detectBot, fixedWindow } from "@/lib/arject";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { courseSchema,CourseSchemaType } from "@/lib/ZodSchema";
+import { request } from "@arcjet/next";
 import { headers } from "next/headers";
 
+const aj = arject.withRule(
+  detectBot({
+    mode:"LIVE",
+    allow:[]
+  })
+).withRule(
+  fixedWindow({
+    mode:"LIVE",
+    window:"1m",
+    max:5
+  })
+)
 export async function CreateCourse(value:CourseSchemaType):Promise<ApiResponse>
 {
-    
-    try {
+    const session = await requireAdmin();
+    try {   
+      const req = await request();
+      const decision = await aj.protect(req,{
+        fingerprint:session.user.id
+      })
+      console.log("decision",decision);
+      if (decision.isDenied()) {
+       if (decision.reason.isRateLimit()) {
+        return {
+          status:"error",
+          message:"you have been block due to rate limiting"
+        }
+       }else
+       {
+        return{
+          status:"error",
+          message:"you are a bot ! if this is mistake contact our support"
+        }
+       }
+      }
 
-        const session =  await auth.api.getSession({headers:await headers()})
         const validation =  courseSchema.safeParse(value);
 
         //  i want to know where is come data,error,seccess ...... i want to here here this answer https://chatgpt.com/s/t_68d38de30a2881918208dc0ec3abee51

@@ -5,6 +5,10 @@ import {z}from "zod";
 import {v4 as uuidv4} from "uuid"
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner"
 import { S3 } from "@/lib/S3Client";
+import arject, { detectBot, fixedWindow } from "@/lib/arject";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { requireAdmin } from "@/app/data/admin/require-admin";
 export const fileUploadSchema  = z.object({
     fileName:z.string().min(1,{message:"filename is required"}),
     contentType:z.string().min(1,{message:"content type is required"}),
@@ -12,10 +16,33 @@ export const fileUploadSchema  = z.object({
     isImage:z.boolean()
 })
 
+const aj = arject.withRule(
+  detectBot({
+    mode:"LIVE",
+    allow:[]
+  })
+).withRule(
+  fixedWindow({
+    mode:"LIVE",
+    window:"1m",
+    max:5
+  })
+)
 export async function POST  (request:Request)
 {
+ console.log("request",request);
+  const session = await requireAdmin()
+  console.log("session",session);
     try {
-        const body = await request.json()
+    const decision = await aj.protect(request,{
+      fingerprint:session?.user.id as string
+    });
+    console.log(decision)
+    if (decision.isDenied()) {
+      return NextResponse.json({error:"dude not good"},{status:429})
+    }
+
+       const body = await request.json()
       console.log("body",body);
   
         const validation = fileUploadSchema.safeParse(body)
