@@ -38,7 +38,7 @@ const page = async({params}:{params:Params}) => {
               <CardDescription>Here you can update Course Structure</CardDescription>
             </CardHeader>
             <CardContent>
-              <CourseStructure/>
+              <CourseStructure data={data}/>
             </CardContent>
           </Card>
          </TabsContent>
