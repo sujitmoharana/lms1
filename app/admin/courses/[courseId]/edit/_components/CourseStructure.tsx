@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ChevronDown, ChevronRight, DeleteIcon, FileText, GripVertical, Trash2, Trash2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 interface iAppProps{
   data:AdminCourseSingularType
@@ -68,15 +69,106 @@ const CourseStructure = ({data}:iAppProps) => {
 
       function handleDragEnd(event) {
         const {active, over} = event;
+        console.log("active id",active.id,"active data",active.data);
+        console.log("over id",over.id,"over data",over.data);
+        console.log("over",over);
+        console.log("active",active);
         
-        if (active.id !== over.id) {
-          setItems((items) => {
-            const oldIndex = items.indexOf(active.id);
-            const newIndex = items.indexOf(over.id);
-            
-            return arrayMove(items, oldIndex, newIndex);
-          });
+                
+        if (!over || active.id === over.id) {
+          return;
         }
+
+        const activeId = active.id;
+        const overId = over.id;
+        const activeType = active.data.current?.type as "chapter" | "lesson";
+        const overType = over.data.current?.type as "chapter" | "lesson";
+        const courseId = data.id;
+        console.log(activeId,overId,activeType,overType);
+        
+
+      if (activeType === 'chapter') {
+        let targetChapterId = null;
+         
+       if (overType === 'chapter') {
+        targetChapterId = overId
+        console.log("targetChapterId",targetChapterId);
+       }else if(overType==='lesson')
+       {
+        targetChapterId = over.data.current?.chapterId ?? null
+        console.log("targetChapterId",targetChapterId);
+       }
+
+       if (!targetChapterId) {
+        toast.error("could not determine chapter for recording");
+        return;
+       }
+
+       const oldIndex = items.findIndex((item)=>item.id === activeId)
+       console.log(oldIndex);
+       const newindex = items.findIndex((item)=>item.id === targetChapterId)
+       console.log(newindex);
+        if (oldIndex===-1 || oldIndex ===-1) {
+          toast.error('could not find chapter old/new index for recording')
+          return;
+        }
+
+        const reordedLocalchapters = arrayMove(items,oldIndex,newindex);
+     console.log(reordedLocalchapters);
+        const updatedChapterForState = reordedLocalchapters.map((chapter,index)=>({
+          ...chapter,order:index+1
+        }))
+          console.log(updatedChapterForState);
+
+        const previousItems = [...items];
+       console.log(previousItems);
+        setItems(updatedChapterForState)
+      }
+        if (activeType === "lesson" && overType === "lesson") {
+          const chapterId = active.data.current?.chapterId;
+          const overChapterId = over.data.current?.chapterId
+        
+          if (!chapterId || chapterId!==overChapterId) {
+            toast.error("Lesson move between different chapters or invalid chapter Id is not allowed")
+            return;
+          }
+
+          const chapterindex = items.findIndex((chapter)=>chapter.id === chapterId);
+          console.log(chapterindex);
+          if (chapterindex === -1) {
+             toast.error("could not find chapter for lesson")
+          }
+
+          const chapterToUpdate = items[chapterindex]
+        console.log(chapterToUpdate);
+          const oldLessonIndex = chapterToUpdate.lessons.findIndex((lesson)=>lesson.id === activeId)
+          console.log(oldLessonIndex);
+          const newLessonIndex = chapterToUpdate.lessons.findIndex((lesson)=>lesson.id === overId)
+         console.log(newLessonIndex);
+          if (oldLessonIndex === -1 && newLessonIndex === -1) {
+            toast.error("could not find lesson for lecoring")
+            return;
+          }
+
+          const reordedLesson = arrayMove(chapterToUpdate.lessons,oldLessonIndex,newLessonIndex);
+          console.log(reordedLesson);
+          const updatedLessonForState = reordedLesson.map((lesson,index)=>({
+            ...lesson,
+            order:index+1
+          }))
+
+          const newItems = [...items];
+         console.log(newItems);
+          newItems[chapterindex] = {
+            ...chapterToUpdate,
+            lessons:updatedLessonForState
+          }
+
+          const previousItems = [...items]
+
+          setItems(newItems);
+        }
+        
     }
 
     function togglechapter(chapterId:string)
@@ -98,7 +190,7 @@ const CourseStructure = ({data}:iAppProps) => {
         <CardHeader className='flex flex-row items-center justify-between border-b border-border'>
             <CardTitle>Chapters</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className='space-y-7'>
             <SortableContext strategy={verticalListSortingStrategy} items={items}>
                    {items.map((items)=>(
                         <SortableItem id={items.id} data={{type:'chapter'}} key={items.id}>
