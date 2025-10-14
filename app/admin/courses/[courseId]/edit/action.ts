@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { courseSchema, CourseSchemaType } from "@/lib/ZodSchema";
 import { request } from "@arcjet/next";
+import { revalidatePath } from "next/cache";
 
 
 const aj = arject.withRule(
@@ -77,4 +78,85 @@ export async function editCourse(data:CourseSchemaType,courseId:string):Promise<
             message:"failed to update course"
         }
     }
+}
+
+
+export async function  reorderLessons(chapterId:string,lessons:{id:string,position:number}[],courseId:string):Promise<ApiResponse>
+{
+  await requireAdmin();
+   try {
+
+    if (!lessons || lessons.length === 0 ) {
+      return {
+        status:"error",
+        message:"no lesson provided for reordering"
+      }
+    }
+
+
+    const update = lessons.map((lesson)=>{
+      return  prisma.lesson.update({
+        where:{
+          id:lesson.id,chapterId:chapterId
+        }
+        ,
+        data:{
+          position:lesson.position
+        }
+      })
+    })
+     await prisma.$transaction(update)
+     console.log(update);
+    revalidatePath(`/admin/courses/${courseId}/edit`)
+    return {
+      status:"success",
+      message:"lesson reordered sucessfully"
+    }
+    
+   } catch (error) {
+    return {
+      message:"failed to reoder lesson",
+      status:"error"
+    }
+   }
+}
+
+export async function reorderChapter(courseId:string,chapters:{id:string,position:number}[]):Promise<ApiResponse>
+{
+  await requireAdmin();
+   try {
+
+    if (!chapters || chapters.length === 0) {
+      return {
+        status:"error",
+        message:"no cchapter provided for reordering"
+      }
+    }
+
+    const updates =  chapters.map((chapter)=>{
+      return prisma.chapter.update({
+        where:{
+          id:chapter.id ,courseId:courseId
+        },
+        data:{
+          position:chapter.position
+        }
+      })
+    })
+
+    await prisma.$transaction(updates)
+
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
+    return {
+      status:"success",
+      message:"chapter reoder sucessfully"
+    }
+    
+   } catch (error) {
+    return {
+      status:"error",
+      message:"failed to reoreder chapter"
+    }
+   }
 }

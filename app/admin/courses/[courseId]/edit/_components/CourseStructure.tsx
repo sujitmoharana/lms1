@@ -1,6 +1,6 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { DndContext, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import React, { ReactNode, useState } from 'react'
 import {CSS} from '@dnd-kit/utilities';
@@ -11,6 +11,7 @@ import { ChevronDown, ChevronRight, DeleteIcon, FileText, GripVertical, Trash2, 
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { reorderChapter, reorderLessons } from '../action'
 
 interface iAppProps{
   data:AdminCourseSingularType
@@ -28,7 +29,7 @@ interface SortableItemProps{
 
 const CourseStructure = ({data}:iAppProps) => {
 
-
+console.log(data.chapter);
   const initialItems = data.chapter.map((chapter)=>({
         id:chapter.id,
         title:chapter.title,
@@ -43,7 +44,8 @@ const CourseStructure = ({data}:iAppProps) => {
       
     
   })) || []
-
+  console.log(initialItems);
+  
     const [items,setItems] = useState(initialItems)
     function SortableItem({children,id,clasName,data}:SortableItemProps) {
         const {
@@ -123,6 +125,36 @@ const CourseStructure = ({data}:iAppProps) => {
         const previousItems = [...items];
        console.log(previousItems);
         setItems(updatedChapterForState)
+
+    if (courseId) {
+         const chaptersToupdate = updatedChapterForState.map((chapter)=>{
+          return {
+            id:chapter.id,
+            position:chapter.order
+          }
+         })
+
+         const reorderPromise = ()=>{
+            return reorderChapter(courseId,chaptersToupdate)
+         }
+
+         toast.promise(reorderPromise(),{
+          loading:"reodering chapters....",
+          success:(result)=>{
+         if (result.status === "success") {
+          return result.message
+         }
+         throw new Error(result.message)
+          },
+          error:()=>{
+            setItems(previousItems);
+            return "failed to reoder chapters."
+          }
+         })
+
+      }
+     
+      return;
       }
         if (activeType === "lesson" && overType === "lesson") {
           const chapterId = active.data.current?.chapterId;
@@ -156,7 +188,7 @@ const CourseStructure = ({data}:iAppProps) => {
             ...lesson,
             order:index+1
           }))
-
+         console.log(updatedLessonForState);
           const newItems = [...items];
          console.log(newItems);
           newItems[chapterindex] = {
@@ -167,7 +199,35 @@ const CourseStructure = ({data}:iAppProps) => {
           const previousItems = [...items]
 
           setItems(newItems);
-        }
+
+          if (courseId) {
+            const lessonToupdate = updatedLessonForState.map((lesson)=>({
+              id:lesson.id,
+              position:lesson.order
+            }))
+         console.log(lessonToupdate);
+            const reorderLessonsPromise = ()=>{
+            return reorderLessons(chapterId,lessonToupdate,courseId)
+            }
+
+            toast.promise(reorderLessonsPromise(),{
+            loading:"reodering lesson",
+            success:(result)=>{
+           if (result.status === "success") {
+             return result.message
+           }
+           throw new Error(result.message)
+         },
+         error:()=>{
+          setItems(previousItems)
+          return "failed to reorder lesson"
+         }
+          })
+
+          }
+
+          return;
+        } 
         
     }
 
