@@ -48,6 +48,26 @@ console.log(data.chapter);
   
     const [items,setItems] = useState(initialItems)
      console.log(items);  // check note in note name some importtant doubt
+               
+  useEffect(() => {
+         setItems((prevItems)=>{
+          const updatedItems = data.chapter.map((chapter)=>{
+            return {
+              id:chapter.id,
+              title:chapter.title,
+              order:chapter.position,
+              isOpen:prevItems.find((item)=>item.id === chapter.id)?.isOpen ?? true,
+              lessons:chapter.lessons.map((lessons)=>({
+                  
+                    id:lessons.id,
+                    title:lessons.title,
+                    order:lessons.position
+              })),
+            }}) || []
+           console.log(updatedItems);
+            return updatedItems
+         })
+    }, [data])
     function SortableItem({children,id,clasName,data}:SortableItemProps) {
         const {
           attributes,
@@ -125,7 +145,7 @@ console.log(data.chapter);
 
         const previousItems = [...items];
        console.log(previousItems);
-        // setItems(updatedChapterForState)
+         setItems(updatedChapterForState)
 
     if (courseId) {
          const chaptersToupdate = updatedChapterForState.map((chapter)=>{
@@ -199,7 +219,7 @@ console.log(data.chapter);
 
           const previousItems = [...items]
 
-          // setItems(newItems);
+           setItems(newItems);
 
           if (courseId) {
             const lessonToupdate = updatedLessonForState.map((lesson)=>({
