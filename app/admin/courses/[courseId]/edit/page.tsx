@@ -10,6 +10,7 @@ type Params = Promise<{courseId:string}>
 const page = async({params}:{params:Params}) => {
     const {courseId} = await params;
     const data = await adminGetCourse(courseId)
+    console.log("hello");
   return (
     <div>
         <h1 className='text-3xl font-bold mb-8'>

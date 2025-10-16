@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DndContext, DragEndEvent, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import {CSS} from '@dnd-kit/utilities';
 import { AdminCourseSingularType } from '@/app/data/admin/admin-get-course'
 import { cn } from '@/lib/utils'    
@@ -47,6 +47,7 @@ console.log(data.chapter);
   console.log(initialItems);
   
     const [items,setItems] = useState(initialItems)
+     console.log(items);  // check note in note name some importtant doubt
     function SortableItem({children,id,clasName,data}:SortableItemProps) {
         const {
           attributes,
@@ -124,7 +125,7 @@ console.log(data.chapter);
 
         const previousItems = [...items];
        console.log(previousItems);
-        setItems(updatedChapterForState)
+        // setItems(updatedChapterForState)
 
     if (courseId) {
          const chaptersToupdate = updatedChapterForState.map((chapter)=>{
@@ -198,7 +199,7 @@ console.log(data.chapter);
 
           const previousItems = [...items]
 
-          setItems(newItems);
+          // setItems(newItems);
 
           if (courseId) {
             const lessonToupdate = updatedLessonForState.map((lesson)=>({
