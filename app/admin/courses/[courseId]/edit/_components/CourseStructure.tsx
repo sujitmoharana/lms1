@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { reorderChapter, reorderLessons } from '../action'
+import NewChaptermodel from './NewChaptermodel'
 
 interface iAppProps{
   data:AdminCourseSingularType
@@ -270,6 +271,7 @@ console.log(data.chapter);
       <Card>
         <CardHeader className='flex flex-row items-center justify-between border-b border-border'>
             <CardTitle>Chapters</CardTitle>
+            <NewChaptermodel courseId={data.id}/>
         </CardHeader>
         <CardContent className='space-y-7'>
             <SortableContext strategy={verticalListSortingStrategy} items={items}>
