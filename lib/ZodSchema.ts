@@ -32,6 +32,17 @@ export const chapterSchema = z.object({
     courseId:z.string().uuid({message:"invalid course id"})
 })
 
+export const lessonSchema = z.object({
+    name:z.string().min(3,{message:"must be atleast 3 character long"}),
+    courseId:z.string().uuid({message:"invalid course id"}),
+    chapterId : z.string().uuid({message:"invalid chapter id"}),
+    description:z.string().min(3,{message:"Description must be at least 3 character long"}).optional(),
+    thumbnailKey:z.string().optional(),
+    videoKey:z.string().optional()
+})
+
 export type CourseSchemaType = z.infer<typeof courseSchema>  //https://chatgpt.com/s/t_68c3cb2a56848191bac4d47962f5e307
 
 export type chapterSchemaType = z.infer<typeof chapterSchema>
+
+export type LessonSchemaType = z.infer<typeof lessonSchema>

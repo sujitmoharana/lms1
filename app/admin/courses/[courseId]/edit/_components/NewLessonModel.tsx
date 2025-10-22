@@ -3,32 +3,33 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { tryCatch } from '@/hooks/try-catch';
-import { chapterSchema, chapterSchemaType } from '@/lib/ZodSchema';
+import { chapterSchema, chapterSchemaType, lessonSchema, LessonSchemaType } from '@/lib/ZodSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
 import React, { act, useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
-import { createChapter } from '../action';
+import { createChapter, createLesson } from '../action';
 import { toast } from 'sonner';
 
-const NewChaptermodel = ({courseId}:{courseId:string}) => {
+const NewLessonModel = ({courseId,chapterId}:{courseId:string,chapterId:string}) => {
 
 const [isOpen, setisOpen] = useState(false);
 const [isPending,startTransaction] = useTransition()
 
-const form = useForm<chapterSchemaType>({
-    resolver: zodResolver(chapterSchema),
+const form = useForm<LessonSchemaType>({
+    resolver: zodResolver(lessonSchema),
     defaultValues: {
      name:"",
-     courseId
+     courseId:courseId,
+     chapterId:chapterId
     }
   });
   
-  async function onSubmit(values:chapterSchemaType)
+  async function onSubmit(values:LessonSchemaType)
   {
     console.log("value",values);
      startTransaction(async ()=>{
-        const {data:result,error} = await tryCatch(createChapter(values))
+        const {data:result,error} = await tryCatch(createLesson(values))
 
         if (error) {
             toast.error("an unexpected error please try again ")
@@ -52,14 +53,14 @@ function handleOpenChnage(open:boolean)
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChnage}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className='gap-2'>
-            <Plus className='size-4'/> New Chapter
+        <Button variant="outline" size="sm"  className='gap-2'>
+            <Plus className='size-4'/> New Lesson
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
          <DialogHeader>
-            <DialogTitle>Create New Chapter</DialogTitle>
-            <DialogDescription>What would you like to name your chapter?</DialogDescription>
+            <DialogTitle>Create New Lesson</DialogTitle>
+            <DialogDescription>What would you like to name your Lesson?</DialogDescription>
          </DialogHeader>
          <Form  {...form}>
           <form className='space-y-8' onSubmit={form.handleSubmit(onSubmit)}>
@@ -67,7 +68,7 @@ function handleOpenChnage(open:boolean)
                 <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                        <Input placeholder='chapter name ' {...field}/>
+                        <Input placeholder='lesson name ' {...field}/>
                     </FormControl>
                     <FormMessage/>
                 </FormItem>
@@ -85,4 +86,4 @@ function handleOpenChnage(open:boolean)
   )
 }
 
-export default NewChaptermodel
+export default NewLessonModel

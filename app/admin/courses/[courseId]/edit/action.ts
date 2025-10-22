@@ -4,7 +4,7 @@ import { requireAdmin } from "@/app/data/admin/require-admin"
 import arject, { detectBot, fixedWindow } from "@/lib/arject";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
-import { chapterSchema, chapterSchemaType, courseSchema, CourseSchemaType } from "@/lib/ZodSchema";
+import { chapterSchema, chapterSchemaType, courseSchema, CourseSchemaType, lessonSchema, LessonSchemaType } from "@/lib/ZodSchema";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
@@ -164,8 +164,10 @@ export async function reorderChapter(courseId:string,chapters:{id:string,positio
 export async function createChapter(values:chapterSchemaType):Promise<ApiResponse>
 {
   await requireAdmin()
+  console.log("value",values);
   try {
     const result = chapterSchema.safeParse(values)
+    console.log(result);
     if (!result) {
       return {status:"error",message:"invalid data"}
     }
@@ -195,5 +197,47 @@ export async function createChapter(values:chapterSchemaType):Promise<ApiRespons
     return {status:"success",message:"chapter created sucessfully"}
   } catch (error) {
     return {status:"error",message:"failed to create chapter"}
+  }
+}
+
+export async function createLesson(values:LessonSchemaType):Promise<ApiResponse>
+{
+  await requireAdmin()
+  console.log("value",values);
+  try {
+    const result = lessonSchema.safeParse(values)
+     console.log("result",result);
+    if (!result) {
+      return {status:"error",message:"invalid data"}
+    }
+
+    await prisma.$transaction(async (tx)=>{
+        const maxpos = await tx.lesson.findFirst({
+          where:{chapterId:result.data?.chapterId},
+          select:{
+            position:true,
+          },
+          orderBy:{
+            position:"desc"
+          }
+        })
+     console.log("maxop",maxpos);
+        await tx.lesson.create({
+          data:{
+            title:result.data?.name,
+            description:result.data?.description,
+            videoKey:result.data?.videoKey,
+            thumbnailKey:result.data?.thumbnailKey,
+            chapterId:result.data?.chapterId,
+            position: (maxpos?.position ?? 0) + 1
+          }
+        })
+    })
+
+    revalidatePath(`/admin/courses/${result.data?.courseId}/edit`)
+    
+    return {status:"success",message:"Lesson created sucessfully"}
+  } catch (error) {
+    return {status:"error",message:"failed to create lesson"}
   }
 }

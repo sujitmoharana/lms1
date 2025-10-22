@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { reorderChapter, reorderLessons } from '../action'
 import NewChaptermodel from './NewChaptermodel'
+import NewLessonModel from './NewLessonModel'
 
 interface iAppProps{
   data:AdminCourseSingularType
@@ -324,9 +325,7 @@ console.log(data.chapter);
                                          })}
                                      </SortableContext>
                                      <div className='p-2'>
-                                      <Button variant="outline" className='w-full'>
-                                        Create New Lesson
-                                      </Button>
+                                     <NewLessonModel chapterId={items.id} courseId={data.id}/>
                                      </div>
                                  </div>
                                  </CollapsibleContent>
