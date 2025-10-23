@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 import { reorderChapter, reorderLessons } from '../action'
 import NewChaptermodel from './NewChaptermodel'
 import NewLessonModel from './NewLessonModel'
+import DeleteLesson from './DeleteLesson'
 
 interface iAppProps{
   data:AdminCourseSingularType
@@ -314,9 +315,7 @@ console.log(data.chapter);
                                                          <Link href={`/admin/courses/${data.id}/${items.id}/${lesson.id}`}>  {lesson.title} </Link>
                                                       </div> 
 
-                                                      <Button variant="ghost"  size="icon">
-                                                        <Trash2Icon className='size-4'/>
-                                                      </Button>
+                                                  <DeleteLesson chapterId={items.id} courseId={data.id} lessonId={lesson.id}/>
 
                                                   </div>
                                                 )} 
