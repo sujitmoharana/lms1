@@ -15,6 +15,7 @@ import { reorderChapter, reorderLessons } from '../action'
 import NewChaptermodel from './NewChaptermodel'
 import NewLessonModel from './NewLessonModel'
 import DeleteLesson from './DeleteLesson'
+import DeleteChapter from './DeleteChapter'
 
 interface iAppProps{
   data:AdminCourseSingularType
@@ -295,9 +296,7 @@ console.log(data.chapter);
                                      </CollapsibleTrigger>
                                      <p className='cursor-pointer hover:text-primary pl-2'>{items.title}</p>
                                    </div>
-                                   <Button size="icon" variant="ghost">
-                                    <Trash2 className='size-4'/>
-                                   </Button>
+                                  <DeleteChapter chapterId={items.id} courseId={data.id} />
                                  </div>
                                  <CollapsibleContent>
                                  <div className='p-1'>
