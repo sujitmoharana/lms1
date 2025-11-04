@@ -131,7 +131,7 @@ const EditCourseform = ({data}:iAppProps) => {
                   <FormLabel>Thumbnail image</FormLabel>
                      <FormControl>
                         {/* <Input placeholder='Thumbnail url' {...field}/> */}
-                        <Uploader onChange={field.onChange} value={field.value}/>{/* 1 */}
+                        <Uploader fileTypeAccepted='image' onChange={field.onChange} value={field.value}/>{/* 1 */}
                      </FormControl>
                      <FormMessage/>
                </FormItem>

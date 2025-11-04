@@ -23,8 +23,9 @@ interface iAppProps
 {
     value?:string;
     onChange?:(value:string)=>void
+    fileTypeAccepted:"image" | "video"
 }
-const Uploader = ({onChange,value}:iAppProps) => {
+const Uploader = ({onChange,value,fileTypeAccepted}:iAppProps) => {
     console.log(value);
     const fileUrl = useConstructUrl(value || '');  
    console.log( useConstructUrl(value || ''));
@@ -35,9 +36,9 @@ const Uploader = ({onChange,value}:iAppProps) => {
         uploading:false,
         progress:0,
         isDeleting:false,
-        fileType:"image",
+        fileType:fileTypeAccepted,
         key:value,
-        objectUrl:fileUrl
+        objectUrl:value ? fileUrl : undefined
     })
    async function uploadFile (file:File)
     {
@@ -54,7 +55,7 @@ const Uploader = ({onChange,value}:iAppProps) => {
                     fileName:file.name,
                     contentType:file.type,
                     size:file.size,
-                    isImage:true
+                    isImage:fileTypeAccepted === "image" ?true :false
                 })
             })
             //console.log(presignedResponse);
@@ -129,7 +130,7 @@ const Uploader = ({onChange,value}:iAppProps) => {
            error:false,
            id:uuidv4(),
            isDeleting:false,
-           fileType:"image"
+           fileType:fileTypeAccepted
         })
 
         uploadFile(file)
@@ -172,7 +173,7 @@ const Uploader = ({onChange,value}:iAppProps) => {
 
            onChange?.("")
 
-            setFileState((prev)=>({file:null,uploading:false,progress:0,objectUrl:undefined,fileType:"image",error:false,id:null,isDeleting:false}))
+            setFileState((prev)=>({file:null,uploading:false,progress:0,objectUrl:undefined,fileType:fileTypeAccepted,error:false,id:null,isDeleting:false}))
 
             toast.success("file removed successfully")
         } catch (error) {
@@ -209,7 +210,7 @@ const Uploader = ({onChange,value}:iAppProps) => {
 
         if (filestate.objectUrl) {
             return (
-                <RenderUplodedState handleRemoveFile={handleRemoveFile} isDeleting={filestate.isDeleting}   previewUrl={filestate.objectUrl}/>
+                <RenderUplodedState filetype={filestate.fileType} handleRemoveFile={handleRemoveFile} isDeleting={filestate.isDeleting}   previewUrl={filestate.objectUrl}/>
             )
         }
         return <RenderEmptystate isDragActive={isDragActive}/>
@@ -224,10 +225,10 @@ const Uploader = ({onChange,value}:iAppProps) => {
 
  const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
-    accept:{"image/*":[]},
+    accept:fileTypeAccepted ==="video"?{'video/*':[]}:{"image/*":[]},
      maxFiles:1,
      multiple:false,
-     maxSize:5*1024*1024, /* i want to store 5mb ..... 1mb is 1024 * 1024 ..... */
+     maxSize:fileTypeAccepted ==="image" ? 5*1024*1024:5000*1024*1024, /* i want to store 5mb ..... 1mb is 1024 * 1024 ..... */
      onDropRejected: rejectedFiles,
      disabled:filestate.uploading || !!filestate.objectUrl
 })

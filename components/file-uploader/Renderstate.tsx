@@ -3,6 +3,7 @@ import { CloudUploadIcon, ImageIcon, ImagesIcon, Loader2, XIcon } from 'lucide-r
 import React from 'react'
 import { Button } from '../ui/button'
 import Image from 'next/image'
+import { file } from 'zod'
 
 const RenderEmptystate = ({isDragActive}:{isDragActive:boolean}) => {
   return (
@@ -11,7 +12,7 @@ const RenderEmptystate = ({isDragActive}:{isDragActive:boolean}) => {
         <CloudUploadIcon className={cn("size-6 text-muted-foreground",isDragActive && "text-primary")}/>
        </div>
        <p className='text-base font-semibold text-foreground'>Drop your file here to <span className='text-primary font-bold cursor-pointer'>Click to upload</span></p>
-       <Button className='mt-4  text-cyan-400 bg-cyan-900'>Select File</Button>
+       <Button type='button' className='mt-4  text-cyan-400 bg-cyan-900'>Select File</Button>
     </div>
   )
 }
@@ -32,11 +33,15 @@ export function RenderErrorState(){
     )
 }
 
-export function RenderUplodedState({previewUrl,isDeleting,handleRemoveFile}:{previewUrl:string,isDeleting:boolean,handleRemoveFile:()=>void})
+export function RenderUplodedState({previewUrl,isDeleting,handleRemoveFile,filetype}:{previewUrl:string,isDeleting:boolean,handleRemoveFile:()=>void,filetype:"image"|"video"})
 {
   return(
-    <div>
+    <div className='relative group w-full h-full flex items-center justify-center '>
+     {filetype ==="video"?(
+      <video src={previewUrl} controls className='rounded w-full h-full'/>
+     ):(
       <Image src={previewUrl} alt='uploded file' fill className='object-contain p-2 '/>
+     )}
       <Button onClick={handleRemoveFile} disabled={isDeleting} variant="destructive" size="icon" className={cn('absolute top-4 right-4')}>
        {isDeleting?(<Loader2 className='size-4 animate-spin'/>):(<XIcon className='size-4'/>)}
       </Button>
