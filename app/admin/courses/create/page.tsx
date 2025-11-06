@@ -18,10 +18,12 @@ import { tryCatch } from '@/hooks/try-catch'
 import { CreateCourse } from './action'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useConfetti } from '@/hooks/use-confetti'
 const CourseCreate = () => {
 
    const [pending,startTransition] = useTransition();
 const router = useRouter()
+const {triggerConfetti} = useConfetti();
      // 1. Define your form. here we use react hook form  /* 4 */
      const form = useForm<CourseSchemaType>({
       resolver: zodResolver(courseSchema) ,
@@ -53,6 +55,7 @@ const router = useRouter()
 
       if (result.status === "success") {
         toast.success(result.message); 
+        triggerConfetti();
         form.reset()
         router.push("/admin/courses")
       }else if(result.status==="error")
