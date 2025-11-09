@@ -46,6 +46,7 @@
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "html-react-parser": "^5.2.8",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
