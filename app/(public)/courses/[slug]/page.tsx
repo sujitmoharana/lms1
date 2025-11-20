@@ -1,7 +1,7 @@
 import { getIndividualCourse } from '@/app/data/course/get-course';
 import RenderDescription from '@/components/rich-text-editor/RenderDesscription';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Separator } from '@/components/ui/separator';
@@ -10,6 +10,10 @@ import { IconBook, IconCategory, IconChartBar, IconChevronDown, IconClock, IconP
 import { CheckCheckIcon, CheckIcon } from 'lucide-react';
 import Image from 'next/image'
 import React from 'react'
+import { enrollInCourseAction } from './action';
+import checkIfCourseBought from '@/app/data/user/user-is-enrolled';
+import Link from 'next/link';
+import EnrollmentButton from './_components/EnrollmentButton';
 
 
 type Params = Promise<{slug:string}>
@@ -19,6 +23,9 @@ const Slugpage = async({params}:{params:Params}) => {
     const course = await getIndividualCourse(slug);
     const thumbnailUrl = useConstructUrl(course.filekey)
     console.log(JSON.parse(course.description));
+    const enrolled = await checkIfCourseBought(course.id)
+    console.log(enrolled);
+    
     
   return (
     <div className='grid grid-cols-1 gap-8 lg:grid-cols-3 mt-5'>
@@ -201,7 +208,16 @@ const Slugpage = async({params}:{params:Params}) => {
                  </li>
                 </ul>
                 </div>
-                <Button className='w-full'>Enroll now!</Button>
+              {
+                enrolled ? (
+                  <Link className={buttonVariants({className:"w-full"})} href="/dashboard">
+                  watch course
+                  </Link> ): (
+                    <EnrollmentButton courseId={course.id} /> 
+
+                  )
+                
+              }
                 <p className='mt-3 text-center text-xs text-muted-foreground'>30-days money-back guarantee</p>
              </CardContent>
           </Card>
