@@ -1,4 +1,4 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
+import { IconBook, IconPlaylistX, IconShoppingCart, IconTrendingDown, IconTrendingUp, IconUser } from "@tabler/icons-react"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -9,94 +9,104 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { admingetdashboardState } from "@/app/data/admin/admin-get-dashboard-state"
 
-export function SectionCards() {
+export async function SectionCards() {
+
+  const {totalCourses,totalLesson,totalSignups,totalcustomers} = await admingetdashboardState()
   return (
-    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4  *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs  @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+       <div >
+       <CardDescription>Total signup</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
+            {totalSignups}
           </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
+       </div>
+        <div className="flex flex-col items-center gap-y-2">
+        <CardAction>
+            <Badge variant="outline" className="text-green-600" >
+              <IconTrendingUp />
+              <div>
+                +12.5%
+              </div>
+            </Badge>
+          </CardAction>
+          <IconUser className="text-muted-foreground"/>
+        </div>
+        </CardHeader>
+        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+          <p className="text-muted-foreground">register user to the platform</p>
+        </CardFooter>
+      </Card>
+      <Card className="@container/card">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+       <div >
+       <CardDescription>Total customers</CardDescription>
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+            {totalcustomers}
+          </CardTitle>
+       </div>
+        <div className="flex flex-col items-center gap-y-2">
+        <CardAction>
+            <Badge variant="outline" className="text-green-600">
               <IconTrendingUp />
               +12.5%
             </Badge>
           </CardAction>
+          <IconShoppingCart className="text-muted-foreground"/>
+        </div>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Visitors for the last 6 months
-          </div>
+          <p className="text-muted-foreground">user who have enrolled in this course</p>
         </CardFooter>
       </Card>
       <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>New Customers</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+       <div >
+       <CardDescription>Total Courses</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
+            {totalCourses}
           </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingDown />
-              -20%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <IconTrendingDown className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Acquisition needs attention
-          </div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
+       </div>
+        <div className="flex flex-col items-center gap-y-2">
+        <CardAction>
+            <Badge variant="outline" className="text-green-600">
               <IconTrendingUp />
               +12.5%
             </Badge>
           </CardAction>
+          <IconBook className="text-muted-foreground"/>
+        </div>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention <IconTrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
+          <p className="text-muted-foreground">Avalaible courses on the platform</p>
         </CardFooter>
       </Card>
       <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Growth Rate</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+       <div >
+       <CardDescription>Total lessons</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
+            {totalLesson}
           </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
+       </div>
+        <div className="flex flex-col items-center gap-y-2">
+        <CardAction>
+            <Badge variant="outline" className="text-green-600">
               <IconTrendingUp />
-              +4.5%
+              +12.5%
             </Badge>
           </CardAction>
+          <IconPlaylistX className="text-muted-foreground"/>
+        </div>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Steady performance increase <IconTrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Meets growth projections</div>
+          <p className="text-muted-foreground">Learing content avalaible</p>
         </CardFooter>
       </Card>
+     
     </div>
   )
 }

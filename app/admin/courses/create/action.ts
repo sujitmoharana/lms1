@@ -3,6 +3,7 @@ import { requireAdmin } from "@/app/data/admin/require-admin";
 import arject, { detectBot, fixedWindow } from "@/lib/arject";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { stripe } from "@/lib/stripe";
 import { ApiResponse } from "@/lib/types";
 import { courseSchema,CourseSchemaType } from "@/lib/ZodSchema";
 import { request } from "@arcjet/next";
@@ -54,10 +55,20 @@ export async function CreateCourse(value:CourseSchemaType):Promise<ApiResponse>
             return {status:"error",message:"invalid form data"}
         }
 
+        const datas = await stripe.products.create({
+          name:validation.data?.title as string ,
+          description:validation.data?.description,
+          default_price_data:{
+            currency:"inr",
+            unit_amount:validation.data?.price
+          }
+        })
+
         const data = await prisma.course.create({
           data:{
             ...validation.data,
-            userID:session?.user.id as string
+            userID:session?.user.id as string,
+            stripePriceId:datas.default_price as string
           }
         })
 

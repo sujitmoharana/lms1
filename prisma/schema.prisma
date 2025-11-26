@@ -90,6 +90,8 @@ model Course {
   price Int
   duration Int
   lavel CourseLevel @default(Beginner)
+  stripePriceId String? @unique 
+
   category String
   smallDescription String
   slug String @unique
