@@ -1,8 +1,9 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
-export async function reuireUser()
+export const reuireUser = cache(async()=>
 {
     const session = await auth.api.getSession({
         headers:await headers()
@@ -13,4 +14,4 @@ export async function reuireUser()
     }
 
     return session.user
-}
+})
