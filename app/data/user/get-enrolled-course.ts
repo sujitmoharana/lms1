@@ -14,6 +14,7 @@ export async function getEnrolledCourse()
             Course:{
                 select:{
                     id:true,
+                    title:true,
                     smallDescription:true,
                     filekey:true,
                     lavel:true,
