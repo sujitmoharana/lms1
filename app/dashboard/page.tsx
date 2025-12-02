@@ -3,6 +3,7 @@ import { getAllCourses } from "../data/course/get-all-courses"
 import { getEnrolledCourse } from "../data/user/get-enrolled-course"
 import PublicCourseCard from "../(public)/_components/PublicCourseCard"
 import Link from "next/link"
+import { CourseProgressCard } from "./_components/CourseProgressCard"
 
 export  default async function DashboardPage()
 {
@@ -26,9 +27,7 @@ export  default async function DashboardPage()
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {
           enrolledCourses.map((course)=>(
-          <Link href={`/dashboard/${course.Course.slug}`}>
-            {course.Course.title}
-          </Link>          
+          <CourseProgressCard data={course} key={course.Course.id}/>       
 ))
         }
        </div>

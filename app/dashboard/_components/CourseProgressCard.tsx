@@ -1,0 +1,45 @@
+"use client"
+import { PublicCourseType } from '@/app/data/course/get-all-courses'
+import { EnrolledCourseType } from '@/app/data/user/get-enrolled-course'
+import { Badge } from '@/components/ui/badge'
+import { buttonVariants } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useConstructUrl } from '@/hooks/use-construct-url'
+import { usecourseProgress } from '@/hooks/use-course-progress'
+import { SchoolIcon, TimerIcon } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import React from 'react'
+
+
+interface iAppProps{
+    data:EnrolledCourseType
+}
+
+export const CourseProgressCard = ({data}:iAppProps) => {
+    const thumbnailUrl = useConstructUrl(data.Course.filekey)
+
+    const {completedLessons,progressPercentage,totalLessons} =usecourseProgress({courseData:data.Course})
+  return (
+    <Card className='group relative py-0 gap-0'>
+        <Badge className='absolute top-2 right-2 z-10'>{data.Course.lavel}</Badge>
+        <Image src={thumbnailUrl} alt='thumbnail image' width={600} height={400} className='w-full aspect-video rounded-t-xl h-full object-cover'/>
+
+        <CardContent className='p-4'>
+          <Link className='font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors' href={`/dashboard/${data.Course.slug}`}>{data.Course.title}</Link>
+          <p className='line-clamp-2 text-sm text-muted-foreground leading-tight mt-2'>{data.Course.smallDescription}</p>
+          <div className='space-y-4 mt-5'>
+              <div className='flex justify-between mb-1 text-sm'>
+                    <p >progress:</p>
+                    <p className='font-medium'>{progressPercentage}%</p>            
+              </div>
+              <Progress value={progressPercentage} className='h-1.5'/>
+              <p className='text-xs text-muted-foreground mt-1'>{completedLessons}/{totalLessons} lesson completed</p>
+          </div>
+          <Link href={`/dashboard/${data.Course.slug}`} className={buttonVariants({className:"w-full mt-4"})}>Learn More</Link>
+        </CardContent>
+    </Card>
+  )
+}
