@@ -67,7 +67,7 @@ const CourseSidebar = ({course}:iAppProps) => {
              <CollapsibleContent className='mt-3 pl-6 border-l-2 space-y-3'>
               {
                 chapter.lessons.map((lesson)=>(
-                  <LessonItem lesson={lesson} slug={course.slug} isActive={currentLessonid === lesson.id }/>
+                  <LessonItem key={lesson.id} lesson={lesson} slug={course.slug} isActive={currentLessonid === lesson.id } completed={lesson.lessonProgress.find((progress)=> progress.lessonId === lesson.id)?.completed || false}/>
                 ))
               }
              </CollapsibleContent>

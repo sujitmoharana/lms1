@@ -30,6 +30,22 @@ export async function getCourseSidebarDate(slug:string)
                     lessons:{
                         orderBy:{
                           position:"asc"  
+                        },
+                        select:{
+                            id:true,
+                            title:true,
+                            position:true,
+                            description:true,
+                            lessonProgress:{
+                               where:{
+                                userId:session.id
+                               },
+                               select:{
+                                completed:true,
+                                lessonId:true,
+                                id:true
+                               }
+                            }
                         }
                     }
                 }

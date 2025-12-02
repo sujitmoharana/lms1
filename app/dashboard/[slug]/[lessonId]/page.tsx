@@ -8,6 +8,8 @@ type Params = Promise<{lessonId:string}>
 const page = async({params}:{params:Params}) => {
     const {lessonId} = await params
     const data = await getLessonContent(lessonId)
+    console.log("current data",data);
+    
   return (
     <div>
        <CourseContent data={data}/>
