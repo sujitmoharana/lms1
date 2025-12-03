@@ -209,7 +209,7 @@ const {triggerConfetti} = useConfetti();
                <FormItem className='w-full'>
                   <FormLabel>Duration</FormLabel>
                      <FormControl>
-                        <Input placeholder='Duration' type='number' {...field}/>
+                        <Input placeholder='Duration' type='number' {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)}/>
                      </FormControl>
                      <FormMessage/>
                </FormItem>
@@ -220,7 +220,7 @@ const {triggerConfetti} = useConfetti();
                <FormItem className='w-full'>
                   <FormLabel>Price ($)</FormLabel>
                      <FormControl>
-                        <Input placeholder='Price' type='number' {...field}/>
+                        <Input placeholder='Price' type='number' {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)}/>
                      </FormControl>
                      <FormMessage/>
                </FormItem>

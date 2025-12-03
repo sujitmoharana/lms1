@@ -19,13 +19,18 @@ export async function getEnrolledCourse()
                     filekey:true,
                     lavel:true,
                     slug:true,
+                    category:true,
                     duration:true,
                     chapter:{
                         select:{
                         id:true,
+                        title:true,
+                        position:true,
                         lessons:{
                             select:{
                                 id:true,
+                                title: true,
+                                description:true,
                                 lessonProgress:{
                                     where:{
                                      userId:user.id   
@@ -35,7 +40,8 @@ export async function getEnrolledCourse()
                                      completed:true,
                                      lessonId:true   
                                     }
-                                }
+                                },
+                                position:true
                             }
                         }    
                         }

@@ -24,6 +24,7 @@ const signInWithGithub = ()=>{
             toast.success('signed in with github,you will be redirected... ')
           },
           onError:(error)=>{
+            console.log(error);
             toast.error("internal server error")
           }
         }})
@@ -42,6 +43,7 @@ const signInWithGithub = ()=>{
                   router.push(`/verify-request?email=${email}`)
                 },
                 onError:(error)=>{
+                  console.log(error);
                   toast.error("error sending email")
                 }
               }

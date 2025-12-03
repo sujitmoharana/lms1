@@ -35,6 +35,7 @@ export async function markLessonComplete(lessonId:string,slug:string):Promise<Ap
         message:"progress updated"
     }
   } catch (error) {
+    console.log(error);
     return{
         status:"error",
         message:"failed to mark as complete"

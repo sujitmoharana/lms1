@@ -23,6 +23,7 @@ export async function deleteCourse(courseId:string):Promise<ApiResponse>
         message:"course deleted successfully"
       }
     } catch (error) {
+      console.log(error);
         return {
             status:"error",
             message:"faield to delete course"

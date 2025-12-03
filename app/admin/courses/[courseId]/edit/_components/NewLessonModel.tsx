@@ -3,12 +3,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { tryCatch } from '@/hooks/try-catch';
-import { chapterSchema, chapterSchemaType, lessonSchema, LessonSchemaType } from '@/lib/ZodSchema';
+import { lessonSchema, LessonSchemaType } from '@/lib/ZodSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
-import React, { act, useState, useTransition } from 'react'
+import React, {useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
-import { createChapter, createLesson } from '../action';
+import {  createLesson } from '../action';
 import { toast } from 'sonner';
 
 const NewLessonModel = ({courseId,chapterId}:{courseId:string,chapterId:string}) => {

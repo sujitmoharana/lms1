@@ -1,7 +1,6 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { headers } from 'next/headers'
-import React from 'react'
 
 const checkIfCourseBought = async(courseId:string):Promise<boolean> => {
 

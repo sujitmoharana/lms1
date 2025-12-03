@@ -10,8 +10,8 @@ interface iAppProps{
         id:string,
         title:string,
         position:number,
-        description:string
-    },
+        description:string | null     
+      },
     slug:string;
     isActive:boolean;
     completed:boolean

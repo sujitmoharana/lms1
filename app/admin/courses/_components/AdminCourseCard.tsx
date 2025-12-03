@@ -3,8 +3,8 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useConstructUrl } from '@/hooks/use-construct-url'
-import { ArrowRight, Eye, MoreVertical, Pencil, School, TimerIcon, Trash, Trash2 } from 'lucide-react'
+import { Useconstructurl } from '@/hooks/use-construct-url'
+import { ArrowRight, Eye, MoreVertical, Pencil, School, TimerIcon, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -15,7 +15,7 @@ interface iAppProps {
 
 
 const AdminCourseCard = ({data}:iAppProps) => {
-    const thumbnail = useConstructUrl(data.filekey)
+    const thumbnail = Useconstructurl(data.filekey)
   return (
    <Card className='group relative py-0 gap-0'>
       {

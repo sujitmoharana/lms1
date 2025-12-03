@@ -5,7 +5,6 @@ import { Trash2 } from 'lucide-react';
 import React, { useState, useTransition } from 'react'
 import { deleteleson } from '../action';
 import { toast } from 'sonner';
-import { isPageStatic } from 'next/dist/build/utils';
 
 const DeleteLesson = ({chapterId,courseId,lessonId}:{chapterId:string,courseId:string,lessonId:string,}) => {
     const [open,setOpen] = useState(false);

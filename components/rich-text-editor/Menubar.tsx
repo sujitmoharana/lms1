@@ -2,7 +2,7 @@ import React from 'react' //3
 import {type Editor} from "@tiptap/react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 import { Toggle } from '../ui/toggle'
-import { AlignCenter, AlignLeftIcon, AlignRight, Bold, Heading1Icon, Heading2Icon, Heading3Icon, HeadingIcon, Italic, ListIcon, ListOrdered, Redo, Strikethrough, Undo } from 'lucide-react'
+import { AlignCenter, AlignLeftIcon, AlignRight, Bold, Heading1Icon, Heading2Icon, Heading3Icon, Italic, ListIcon, ListOrdered, Redo, Strikethrough, Undo } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
 interface iAppprops{

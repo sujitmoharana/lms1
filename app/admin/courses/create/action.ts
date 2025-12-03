@@ -1,14 +1,11 @@
 "use server"
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import arject, { detectBot, fixedWindow } from "@/lib/arject";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { ApiResponse } from "@/lib/types";
 import { courseSchema,CourseSchemaType } from "@/lib/ZodSchema";
 import { request } from "@arcjet/next";
-import { headers } from "next/headers";
-
 const aj = arject.withRule(
   detectBot({
     mode:"LIVE",
@@ -64,9 +61,18 @@ export async function CreateCourse(value:CourseSchemaType):Promise<ApiResponse>
           }
         })
 
-        const data = await prisma.course.create({
+      await prisma.course.create({
           data:{
-            ...validation.data,
+            title:validation.data?.title as string,
+            description:validation.data?.description as string,
+            filekey : validation.data?.filekey as string,
+            price:validation.data?.price as number,
+            duration:validation.data?.duration as number,
+            lavel:validation.data?.lavel,
+            category:validation.data?.category as string,
+            smallDescription:validation.data?.smallDescription as string,
+            slug:validation.data?.slug as string,
+            status:validation.data?.status,
             userID:session?.user.id as string,
             stripePriceId:datas.default_price as string
           }

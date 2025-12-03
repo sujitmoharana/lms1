@@ -1,5 +1,5 @@
 import "server-only";
-import { paginateListBuckets, S3Client } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 import { env } from "./env";
 export const S3 = new S3Client({
   // region value can be directly 'auto'

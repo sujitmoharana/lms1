@@ -1,10 +1,8 @@
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import arject, { detectBot, fixedWindow } from "@/lib/arject";
-import { auth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { S3 } from "@/lib/S3Client";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 const aj = arject.withRule(
@@ -55,6 +53,7 @@ export async function DELETE(request:Request)
         return NextResponse.json({message:"file deleted successfully"},{status:200})
 
     } catch (error) {
+      console.log(error);
         return NextResponse.json({error:'missing or invalid object key'},{status:500})
 
     }

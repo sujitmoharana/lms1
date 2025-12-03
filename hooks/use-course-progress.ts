@@ -14,7 +14,7 @@ interface CourseProgressResult{
     progressPercentage:number
 }
 
-export function usecourseProgress({courseData}:iAppProps):CourseProgressResult
+export function useCourseProgress({courseData}:iAppProps):CourseProgressResult
 {
     return useMemo(()=>{
         let totalLessons = 0;

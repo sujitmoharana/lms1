@@ -3,8 +3,8 @@ import { LessonContentType } from '@/app/data/course/get-lesson-content'
 import RenderDescription from '@/components/rich-text-editor/RenderDesscription';
 import { Button } from '@/components/ui/button';
 import { tryCatch } from '@/hooks/try-catch';
-import { useConstructUrl } from '@/hooks/use-construct-url';
-import { BookIcon, CheckCheckIcon, CheckCircle } from 'lucide-react';
+import { Useconstructurl } from '@/hooks/use-construct-url';
+import { BookIcon,CheckCircle } from 'lucide-react';
 import React, { useTransition } from 'react'
 import { markLessonComplete } from '../action';
 import { toast } from 'sonner';
@@ -21,8 +21,8 @@ const CourseContent = ({data}:iAppProps) => {
    const {triggerConfetti} = useConfetti()
   function VideopLayer({thumbnailKey,videoKey}:{thumbnailKey:string,videoKey:string})
   {
-         const videoUrl = useConstructUrl(videoKey)
-         const thumbnailurl = useConstructUrl(thumbnailKey)
+         const videoUrl = Useconstructurl(videoKey)
+         const thumbnailurl = Useconstructurl(thumbnailKey)
 
          if (!videoKey) {
         return(

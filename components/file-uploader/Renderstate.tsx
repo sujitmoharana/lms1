@@ -1,9 +1,8 @@
 import { cn } from '@/lib/utils'
-import { CloudUploadIcon, ImageIcon, ImagesIcon, Loader2, XIcon } from 'lucide-react'
+import { CloudUploadIcon, ImageIcon, Loader2, XIcon } from 'lucide-react'
 import React from 'react'
 import { Button } from '../ui/button'
 import Image from 'next/image'
-import { file } from 'zod'
 
 const RenderEmptystate = ({isDragActive}:{isDragActive:boolean}) => {
   return (

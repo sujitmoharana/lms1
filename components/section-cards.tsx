@@ -1,4 +1,4 @@
-import { IconBook, IconPlaylistX, IconShoppingCart, IconTrendingDown, IconTrendingUp, IconUser } from "@tabler/icons-react"
+import { IconBook, IconPlaylistX, IconShoppingCart, IconTrendingUp, IconUser } from "@tabler/icons-react"
 
 import { Badge } from "@/components/ui/badge"
 import {

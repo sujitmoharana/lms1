@@ -26,6 +26,10 @@ export async function POST(req:Request)
         console.log("event",event);
         
     } catch (error) {
+        console.log(error);
+
+
+        
         return new Response("webhook error",{status:400})
     }
 

@@ -1,15 +1,10 @@
 "use client"
 import { Badge } from '@/components/ui/badge'
-import { Button, buttonVariants } from '@/components/ui/button'
+import {  buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { authClient } from '@/lib/auth-client'
-import { Loader } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { title } from 'process'
 import React from 'react'
-import { toast } from 'sonner'
 
 interface featureProps {
     title:string;
@@ -40,7 +35,7 @@ const features: Array<featureProps> = [
     }
   ];
   const  Page = () => {
-const {data:session}= authClient.useSession()
+     authClient.useSession()
   return (
   <>
   <section className='relative py-20'>

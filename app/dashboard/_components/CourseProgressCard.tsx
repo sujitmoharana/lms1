@@ -1,14 +1,11 @@
 "use client"
-import { PublicCourseType } from '@/app/data/course/get-all-courses'
 import { EnrolledCourseType } from '@/app/data/user/get-enrolled-course'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useConstructUrl } from '@/hooks/use-construct-url'
-import { usecourseProgress } from '@/hooks/use-course-progress'
-import { SchoolIcon, TimerIcon } from 'lucide-react'
+import { Useconstructurl } from '@/hooks/use-construct-url'
+import { useCourseProgress } from '@/hooks/use-course-progress'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -19,9 +16,9 @@ interface iAppProps{
 }
 
 export const CourseProgressCard = ({data}:iAppProps) => {
-    const thumbnailUrl = useConstructUrl(data.Course.filekey)
+    const thumbnailUrl = Useconstructurl(data.Course.filekey)
 
-    const {completedLessons,progressPercentage,totalLessons} =usecourseProgress({courseData:data.Course})
+    const {completedLessons,progressPercentage,totalLessons} =useCourseProgress({courseData:data.Course})
   return (
     <Card className='group relative py-0 gap-0'>
         <Badge className='absolute top-2 right-2 z-10'>{data.Course.lavel}</Badge>

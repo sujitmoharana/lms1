@@ -35,6 +35,7 @@ export async function updateLesson(values:LessonSchemaType,lessonId:string):Prom
 
         
     } catch (error) {
+        console.log(error);
         return{
             status:"error",
             message:"faield to update course"

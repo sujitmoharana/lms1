@@ -6,8 +6,6 @@ import {v4 as uuidv4} from "uuid"
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner"
 import { S3 } from "@/lib/S3Client";
 import arject, { detectBot, fixedWindow } from "@/lib/arject";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { requireAdmin } from "@/app/data/admin/require-admin";
 export const fileUploadSchema  = z.object({
     fileName:z.string().min(1,{message:"filename is required"}),
@@ -53,7 +51,7 @@ export async function POST  (request:Request)
           return NextResponse.json({error:"invalid Requst Body"},{status:400})
         }
    
-        const {fileName,contentType,size} = validation.data;
+        const {fileName,contentType} = validation.data;
 
         const uniquekey = `${uuidv4()}-${fileName}`
   console.log("unikley",uniquekey);
@@ -80,6 +78,7 @@ console.log("command",command);
 
         return NextResponse.json(response)
     } catch (error) {
+      console.log(error)
         return NextResponse.json({error:"Failed to generate presigned URl"},{status:500})
     }
 }

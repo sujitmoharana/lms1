@@ -16,7 +16,6 @@ import Uploader from '@/components/file-uploader/Uploader'
 import { tryCatch } from '@/hooks/try-catch'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { CreateCourse } from '../../../create/action'
 import { editCourse } from '../action'
 import { AdminCourseSingularType } from '@/app/data/admin/admin-get-course'
 
@@ -196,7 +195,7 @@ const EditCourseform = ({data}:iAppProps) => {
                <FormItem className='w-full'>
                   <FormLabel>Duration</FormLabel>
                      <FormControl>
-                        <Input placeholder='Duration' type='number' {...field}/>
+                        <Input placeholder='Duration' type='number' {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)}/>
                      </FormControl>
                      <FormMessage/>
                </FormItem>
@@ -207,7 +206,7 @@ const EditCourseform = ({data}:iAppProps) => {
                <FormItem className='w-full'>
                   <FormLabel>Price ($)</FormLabel>
                      <FormControl>
-                        <Input placeholder='Price' type='number' {...field}/>
+                        <Input placeholder='Price' type='number' {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)}/>
                      </FormControl>
                      <FormMessage/>
                </FormItem>

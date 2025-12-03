@@ -32,7 +32,7 @@ import {
 
 export const description = "An interactive area chart"
 
-const chartData = [
+/* const chartData = [
   { date: "2024-04-01", enrollments: 372 },
   { date: "2024-04-02", enrollments: 277 },
   { date: "2024-04-03", enrollments: 287 },
@@ -124,7 +124,7 @@ const chartData = [
   { date: "2024-06-28", enrollments: 349 },
   { date: "2024-06-29", enrollments: 263 },
   { date: "2024-06-30", enrollments: 846 },
-];
+]; */
 
 
 const chartConfig = {

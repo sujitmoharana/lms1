@@ -6,7 +6,7 @@ import { tryCatch } from '@/hooks/try-catch';
 import { chapterSchema, chapterSchemaType } from '@/lib/ZodSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
-import React, { act, useState, useTransition } from 'react'
+import React, { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form';
 import { createChapter } from '../action';
 import { toast } from 'sonner';

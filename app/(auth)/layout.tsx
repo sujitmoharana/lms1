@@ -2,7 +2,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { Children } from 'react'
+import React from 'react'
 import logo from "@/public/online-course.png"
 const Layout = ({children}:{children:React.ReactNode}) => {
   return (

@@ -73,6 +73,7 @@ export async function editCourse(data:CourseSchemaType,courseId:string):Promise<
             message:"Course updated successfully"
         }
     } catch (error) {
+      console.log(error);
         return {
             status:"error",
             message:"failed to update course"
@@ -114,6 +115,7 @@ export async function  reorderLessons(chapterId:string,lessons:{id:string,positi
     }
     
    } catch (error) {
+    console.log(error);
     return {
       message:"failed to reoder lesson",
       status:"error"
@@ -154,6 +156,7 @@ export async function reorderChapter(courseId:string,chapters:{id:string,positio
     }
     
    } catch (error) {
+    console.log(error);
     return {
       status:"error",
       message:"failed to reoreder chapter"
@@ -185,8 +188,8 @@ export async function createChapter(values:chapterSchemaType):Promise<ApiRespons
      console.log("maxop",maxpos);
         await tx.chapter.create({
           data:{
-            title:result.data?.name ,
-            courseId:result.data?.courseId,
+            title:result.data?.name as string ,
+            courseId:result.data?.courseId as string,
             position: (maxpos?.position ?? 0) + 1
           }
         })
@@ -196,6 +199,7 @@ export async function createChapter(values:chapterSchemaType):Promise<ApiRespons
     
     return {status:"success",message:"chapter created sucessfully"}
   } catch (error) {
+    console.log(error);
     return {status:"error",message:"failed to create chapter"}
   }
 }
@@ -224,11 +228,11 @@ export async function createLesson(values:LessonSchemaType):Promise<ApiResponse>
      console.log("maxop",maxpos);
         await tx.lesson.create({
           data:{
-            title:result.data?.name,
-            description:result.data?.description,
-            videoKey:result.data?.videoKey,
-            thumbnailKey:result.data?.thumbnailKey,
-            chapterId:result.data?.chapterId,
+            title:result.data?.name as string,
+            description:result.data?.description as string,
+            videoKey:result.data?.videoKey as string,
+            thumbnailKey:result.data?.thumbnailKey as string,
+            chapterId:result.data?.chapterId as string,
             position: (maxpos?.position ?? 0) + 1
           }
         })
@@ -238,6 +242,7 @@ export async function createLesson(values:LessonSchemaType):Promise<ApiResponse>
     
     return {status:"success",message:"Lesson created sucessfully"}
   } catch (error) {
+    console.log(error)
     return {status:"error",message:"failed to create lesson"}
   }
 }
@@ -309,6 +314,7 @@ return {
   message:"lesson deleted and positions reordered successfully"
 }
   } catch (error) {
+    console.log(error);
     return {
       status:"error",
       message:"failed to delete lesson"
@@ -382,6 +388,7 @@ return {
   message:"lesson deleted and positions reordered successfully"
 }
   } catch (error) {
+    console.log(error);
     return {
       status:"error",
       message:"failed to delete lesson"

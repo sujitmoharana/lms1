@@ -1,11 +1,9 @@
 "use client"//3
 
 import {
-  IconCreditCard,
   IconDashboard,
   IconDotsVertical,
   IconLogout,
-  IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react"
 
@@ -38,10 +36,10 @@ import { toast } from "sonner"
 export function NavUser() {
   const { isMobile } = useSidebar()
   const {data:session,isPending} = authClient.useSession()
+  const router  = useRouter()
   if (isPending) {
     return null
   }
-  const router  = useRouter()
   async function signout(){
       await authClient.signOut({
         fetchOptions:{

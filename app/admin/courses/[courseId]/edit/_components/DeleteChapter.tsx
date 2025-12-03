@@ -3,9 +3,8 @@ import { Button } from '@/components/ui/button';
 import { tryCatch } from '@/hooks/try-catch';
 import { Trash2 } from 'lucide-react';
 import React, { useState, useTransition } from 'react'
-import { deletechapter, deleteleson } from '../action';
+import { deletechapter, } from '../action';
 import { toast } from 'sonner';
-import { isPageStatic } from 'next/dist/build/utils';
 
 const DeleteChapter = ({chapterId,courseId}:{chapterId:string,courseId:string}) => {
     const [open,setOpen] = useState(false);

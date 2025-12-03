@@ -1,16 +1,15 @@
 import { getIndividualCourse } from '@/app/data/course/get-course';
 import RenderDescription from '@/components/rich-text-editor/RenderDesscription';
 import { Badge } from '@/components/ui/badge';
-import { Button, buttonVariants } from '@/components/ui/button';
+import {buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Separator } from '@/components/ui/separator';
-import { useConstructUrl } from '@/hooks/use-construct-url';
+import { Useconstructurl } from '@/hooks/use-construct-url';
 import { IconBook, IconCategory, IconChartBar, IconChevronDown, IconClock, IconPlayerPlay } from '@tabler/icons-react';
-import { CheckCheckIcon, CheckIcon } from 'lucide-react';
+import { CheckIcon } from 'lucide-react';
 import Image from 'next/image'
 import React from 'react'
-import { enrollInCourseAction } from './action';
 import checkIfCourseBought from '@/app/data/user/user-is-enrolled';
 import Link from 'next/link';
 import EnrollmentButton from './_components/EnrollmentButton';
@@ -21,7 +20,7 @@ type Params = Promise<{slug:string}>
 const Slugpage = async({params}:{params:Params}) => {
     const {slug} = await params;
     const course = await getIndividualCourse(slug);
-    const thumbnailUrl = useConstructUrl(course.filekey)
+    const thumbnailUrl = Useconstructurl(course.filekey)
     console.log(JSON.parse(course.description));
     const enrolled = await checkIfCourseBought(course.id)
     console.log(enrolled);

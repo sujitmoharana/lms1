@@ -1,13 +1,13 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { DndContext, DragEndEvent, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core'
+import { DndContext,  DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import React, { ReactNode, useEffect, useState } from 'react'
 import {CSS} from '@dnd-kit/utilities';
 import { AdminCourseSingularType } from '@/app/data/admin/admin-get-course'
 import { cn } from '@/lib/utils'    
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { ChevronDown, ChevronRight, DeleteIcon, FileText, GripVertical, Trash2, Trash2Icon } from 'lucide-react'
+import { ChevronDown, ChevronRight, FileText, GripVertical, } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { toast } from 'sonner'
@@ -16,6 +16,8 @@ import NewChaptermodel from './NewChaptermodel'
 import NewLessonModel from './NewLessonModel'
 import DeleteLesson from './DeleteLesson'
 import DeleteChapter from './DeleteChapter'
+import { DragEndEvent } from "@dnd-kit/core";
+
 
 interface iAppProps{
   data:AdminCourseSingularType
@@ -94,12 +96,12 @@ console.log(data.chapter);
         );
       }
 
-      function handleDragEnd(event) {
+      function handleDragEnd(event:DragEndEvent) {
         const {active, over} = event;
-        console.log("active id",active.id,"active data",active.data);
+     /*    console.log("active id",active.id,"active data",active.data);
         console.log("over id",over.id,"over data",over.data);
         console.log("over",over);
-        console.log("active",active);
+        console.log("active",active); */
         
                 
         if (!over || active.id === over.id) {
