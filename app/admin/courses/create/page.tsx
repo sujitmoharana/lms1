@@ -12,7 +12,12 @@ import { Input } from '@/components/ui/input'
 import slugify from "slugify"
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import Richtexteditor from '@/components/rich-text-editor/Editor'
+import dynamic from "next/dynamic";
+
+const Richtexteditor = dynamic(
+  () => import("@/components/rich-text-editor/Editor"),
+  { ssr: false }
+);
 import Uploader from '@/components/file-uploader/Uploader'
 import { tryCatch } from '@/hooks/try-catch'
 import { CreateCourse } from './action'
