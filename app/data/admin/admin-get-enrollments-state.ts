@@ -13,7 +13,8 @@ export async function adminGetEnrollmentsState()
     where:{
         createdAt:{
             gte:thirtyDaysAgo //gte fullform is greterthen or equalto
-        } 
+        },
+        status:"Active"
     },
     select:{
         createdAt:true
