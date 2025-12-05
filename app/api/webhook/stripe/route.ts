@@ -67,7 +67,8 @@ export async function POST(req:Request)
                userId:user.id, 
                courseId:courseId,
                amount:session.amount_total as number,
-               status:"Active"
+               status:"Active",
+               updatedAt:new Date()
             }
         })
 

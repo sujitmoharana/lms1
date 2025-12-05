@@ -133,7 +133,6 @@ export async function enrollInCourseAction(courseId:string):Promise<ApiResponse 
                     data:{
                         amount:course.price,
                         status:"Pending",
-                        updatedAt:new Date()
                     }
                 })
 
