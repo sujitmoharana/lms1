@@ -1,13 +1,17 @@
 import { prisma } from "@/lib/db";
+import { reuireUser } from "../user/require-user";
 
 export async function getAllCourses()
 {
 
     await new Promise((resolve)=>setTimeout(resolve,2000))
-
+    const user = await reuireUser();
     const data = await prisma.course.findMany({
         where:{
-            status:"Published"
+            status:"Published",
+            User:{
+             email:user.email
+            }
         },
         orderBy:{
         createdAt:"desc"
